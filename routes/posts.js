@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
     return res
       .status(400)
       .json({
-        errorMessage: "Please provide title and contents for the post."
+        error: "Please provide title and contents for the post."
       });
   }
   try {
@@ -21,17 +21,27 @@ router.post("/", async (req, res) => {
     return res.status(201).json(newPost);
   } catch (err) {
     return res.status(500).json({
-      errorMessage: "There was an error while saving the post to the database"
+      error: "There was an error while saving the post to the database" 
     });
   }
 });
 
-router.get("/", () => {});
+router.get("/", async (req, res) => {
+    try {
+        const posts = await db.find()
+        res.json(posts)
+    }
+    catch (err){
+        return res.status(500).json({
+            error: "The posts information could not be retrieved."
+          });
+    }
+});
 
-router.get("/:id", () => {});
+router.get("/:id", async () => {});
 
-router.delete("/:id", () => {});
+router.delete("/:id", async () => {});
 
-router.put("/:id", () => {});
+router.put("/:id", async () => {});
 
 module.exports = router;

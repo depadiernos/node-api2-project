@@ -73,13 +73,15 @@ router.put("/:id", async (req, res) => {
       .json({ error: "Please provide title and/or contents for the post" });
   }
   try {
-    const post = await db.findById(req.params.id);
-    if (!post) {
+    const postId = await db.findById(req.params.id);
+    if (!postId) {
       return res.status(404).json({ message: "The post with the specified" });
     }
-    const computedPost = { title: req.body.title, contents: req.body.contents };
-    const newPost = await db.update(computedPost);
-    res.status(200).json(newPost);
+    const newPost = await db.update(req.params.id, {
+      title: req.body.title,
+      contents: req.body.contents
+    });
+    res.status(200).json(postId);
   } catch (err) {
     res
       .status(500)

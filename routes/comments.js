@@ -12,9 +12,9 @@ router.post("/", async (req, res)=>{
         return res.status(400).json({error: "Please provide text for the comment."})
     }
     try {
-        const computedComment = { text: req.body.text }
+        const computedComment = { text: req.body.text, post_id: req.params.id }
         const commentId = await db.insertComment(computedComment)
-        const newComment = await db.findCommentById(commentId)
+        const newComment = await db.findCommentById(commentId.id)
         res.status(201).json(newComment)
     }
     catch (err){
